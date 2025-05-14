@@ -54,56 +54,64 @@ const Dashboard = () => {
     console.log(response);
 
     setDeviceID(response.devices[0].id);
-    
   };
 
-  const handlePlay = async(song) => {
-    const token = localStorage.getItem("access_token")
-    const data ={
-      uris: [song]
-    }
+  const handlePlay = async (song) => {
+    const token = localStorage.getItem("access_token");
+    const data = {
+      uris: [song],
+    };
     const url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
     const play = await spotifyAPI(url, "PUT", JSON.stringify(data), token);
-    console.log(play)
+    console.log(play);
   };
   return (
     <>
+    <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#1F1F1F",
+          minHeight: "100vh",
+          color: "#81b71a"
+        }}
+      >
       <div>Dashboard</div>
       <button onClick={getDeviceId}>GET DEVICE ID</button>
-      <div>
+        <p>Search</p>
+        <input
+          name="song"
+          type="text"
+          value={search.song}
+          onChange={handleChange}
+        />
+        <p>Select Types:</p>
+        <select name="types" value={search.types} onChange={handleChange}>
+          {selectTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
 
-      </div>
-      <p>Search</p>
-      <input
-        name="song"
-        type="text"
-        value={search.song}
-        onChange={handleChange}
-      />
-      <p>Select Types:</p>
-      <select name="types" value={search.types} onChange={handleChange}>
-        {selectTypes.map((type) => (
-          <option key={type} value={type}>
-            {type}
-          </option>
+        <button onClick={handleSearch}>Search</button>
+
+        {results.map((result, idx) => (
+          <div key={idx}>
+            <div>
+              <img src={result.album.images[0].url} width={150} />
+            </div>
+            <div>
+              <p>{result.artists[0].name}</p>
+            </div>
+            <div>
+              <button onClick={() => handlePlay(result.uri)}>Play </button>
+            </div>
+          </div>
         ))}
-      </select>
-
-      <button onClick={handleSearch}>Search</button>
-
-      {results.map((result, idx) => (
-        <div key={idx}>
-          <div>
-            <img src={result.album.images[0].url} width={150} />
-          </div>
-          <div>
-            <p>{result.artists[0].name}</p>
-          </div>
-          <div>
-            <button onClick={()=>handlePlay(result.uri)}>Play </button>
-          </div>
-        </div>
-      ))}
+      </div>
     </>
   );
 };
