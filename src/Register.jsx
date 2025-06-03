@@ -1,27 +1,38 @@
-import React, {useState} from 'react'
+import React, { useState } from "react";
+import { spotifyAPI } from "./api/spotifyAPI";
+import "./styles.css";
 
 const Register = () => {
-    const [form, setForm] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-      });
-    
-      const handleChange = (e) => {
-        const { value, name } = e.target;
-        const newForm = {
-          ...form,
-          [name]: value,
-        };
-    
-        setForm(newForm);
-      };
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    const newForm = {
+      ...form,
+      [name]: value,
+    };
+
+    setForm(newForm);
+  };
+  const handleRegistro = async () => {
+    const url = "http://localhost:3000/api/users";
+    console.log(form);
+    const data = JSON.stringify(form)
+    console.log((data))
+    const res = await spotifyAPI(url, "POST", data, null);
+    console.log(res);
+  };
 
   return (
     <>
-    <div>Register</div>
-    <label>
+    <div className="spotify">
+      <div>Register:ㅤ</div>
+      <label>
         First Name:
         <input
           type="text"
@@ -57,8 +68,10 @@ const Register = () => {
           value={form.name}
         />
       </label>
-      </>
-  )
-}
+      <button className="button"onClick={handleRegistro}>Registrar</button>
+      </div>
+    </>
+  );
+};
 
-export default Register
+export default Register;
