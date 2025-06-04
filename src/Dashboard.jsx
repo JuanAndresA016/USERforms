@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   const createFavs = async (favs) => {
     console.log(favs);
-    const userId = 2;
+    const userId = localStorage.getItem("user");
     const url = `http://localhost:3000/api/users/${userId}/favorites`;
 
     const data = {
